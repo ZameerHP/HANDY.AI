@@ -9,6 +9,7 @@ interface ToolPrivacyFact {
   name: string;
   shortName: string;
   status: string;
+  hue: string;
   isDownload: boolean;
   execution: string;
   downloads: string;
@@ -21,6 +22,7 @@ const TOOL_FACTS: ToolPrivacyFact[] = [
     name: 'Universal Image Format Converter',
     shortName: 'Format Converter',
     status: 'Runs locally',
+    hue: '#5EC4BA',
     isDownload: false,
     execution:
       'Runs 100% locally in browser memory using HTML5 Canvas & Web Workers.',
@@ -33,6 +35,7 @@ const TOOL_FACTS: ToolPrivacyFact[] = [
     name: 'Image Quality Enhancer',
     shortName: 'Quality Enhancer',
     status: 'Runs locally',
+    hue: '#E6B866',
     isDownload: false,
     execution:
       'Processes raw RGBA pixel arrays locally via client-side convolution and bilateral filters.',
@@ -45,6 +48,7 @@ const TOOL_FACTS: ToolPrivacyFact[] = [
     name: 'Accurate AI Background Remover',
     shortName: 'Background Remover',
     status: 'One-time 28 MB model download',
+    hue: '#A08BF5',
     isDownload: true,
     execution:
       'Inference runs entirely on-device via WebAssembly/WebGPU through ONNX Runtime.',
@@ -58,6 +62,7 @@ const TOOL_FACTS: ToolPrivacyFact[] = [
     name: 'Universal Units & Quantities',
     shortName: 'Units Converter',
     status: 'Runs locally',
+    hue: '#6FA9F5',
     isDownload: false,
     execution:
       'Mathematical conversions execute synchronously via pure JavaScript math routines and BigInt arithmetic.',
@@ -69,6 +74,7 @@ const TOOL_FACTS: ToolPrivacyFact[] = [
     name: 'Body Mass Index Calculator',
     shortName: 'BMI Calculator',
     status: 'Runs locally',
+    hue: '#6FD49A',
     isDownload: false,
     execution:
       'Evaluated locally in memory according to WHO clinical equations and CDC pediatric percentiles.',
@@ -155,13 +161,27 @@ export const PrivacySection: React.FC = () => {
                     aria-selected={isActive}
                     aria-controls={`panel-${fact.id}`}
                     onClick={() => setActiveTab(idx)}
-                    className={`px-3.5 py-2 rounded-[8px] text-[13px] sm:text-[14px] font-medium transition-all duration-200 focus:outline-none focus-visible:ring-1 focus-visible:ring-[#5EC4BA] ${
+                    style={
                       isActive
-                        ? 'bg-[#0F1A22] text-[#EAF2F4] border border-[rgba(255,255,255,0.12)] shadow-sm'
+                        ? {
+                            borderColor: `${fact.hue}55`,
+                            boxShadow: `0 0 0 1px ${fact.hue}33`,
+                          }
+                        : {}
+                    }
+                    className={`px-3.5 py-2 rounded-[8px] text-[13px] sm:text-[14px] font-medium transition-all duration-200 focus:outline-none focus-visible:ring-1 flex items-center gap-2 ${
+                      isActive
+                        ? 'bg-[#0F1A22] text-[#EAF2F4] border'
                         : 'text-[#8FA3AB] hover:text-[#EAF2F4] hover:bg-white/[0.02]'
                     }`}
                   >
-                    {fact.shortName}
+                    {isActive && (
+                      <span
+                        className="w-1.5 h-1.5 rounded-full shrink-0"
+                        style={{ backgroundColor: fact.hue }}
+                      />
+                    )}
+                    <span>{fact.shortName}</span>
                   </button>
                 );
               })}
@@ -183,8 +203,9 @@ export const PrivacySection: React.FC = () => {
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[6px] bg-[#0F1A22] border border-[rgba(255,255,255,0.08)] shrink-0 self-start sm:self-auto">
                   <span
                     className={`w-2 h-2 rounded-full ${
-                      currentFact.isDownload ? 'bg-[#5EC4BA]' : 'bg-[#5EC4BA] animate-pulse'
+                      currentFact.isDownload ? '' : 'animate-pulse'
                     }`}
+                    style={{ backgroundColor: currentFact.hue }}
                   />
                   <span className="text-xs font-mono text-[#EAF2F4]">
                     {currentFact.status}

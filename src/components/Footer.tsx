@@ -2,6 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { scrollToSection } from '../utils/scroll';
+import {
+  FormatConverterIcon,
+  QualityEnhancerIcon,
+  BackgroundRemoverIcon,
+  UnitsQuantitiesIcon,
+  BmiCalculatorIcon,
+} from './ToolIcons';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -93,41 +100,46 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 <li>
                   <button
                     onClick={() => handleToolClick('/image-converter')}
-                    className="text-[#8FA3AB] hover:text-[#5EC4BA] transition-colors text-left"
+                    className="text-[#8FA3AB] hover:text-[#5EC4BA] transition-colors text-left flex items-center gap-2"
                   >
-                    Format Converter
+                    <FormatConverterIcon size={16} hue="#5EC4BA" className="w-4 h-4 shrink-0" />
+                    <span>Format Converter</span>
                   </button>
                 </li>
                 <li>
                   <button
                     onClick={() => handleToolClick('/image-enhancer')}
-                    className="text-[#8FA3AB] hover:text-[#5EC4BA] transition-colors text-left"
+                    className="text-[#8FA3AB] hover:text-[#E6B866] transition-colors text-left flex items-center gap-2"
                   >
-                    Quality Enhancer
+                    <QualityEnhancerIcon size={16} hue="#E6B866" className="w-4 h-4 shrink-0" />
+                    <span>Quality Enhancer</span>
                   </button>
                 </li>
                 <li>
                   <button
                     onClick={() => handleToolClick('/background-remover')}
-                    className="text-[#8FA3AB] hover:text-[#5EC4BA] transition-colors text-left"
+                    className="text-[#8FA3AB] hover:text-[#A08BF5] transition-colors text-left flex items-center gap-2"
                   >
-                    Background Remover
+                    <BackgroundRemoverIcon size={16} hue="#A08BF5" className="w-4 h-4 shrink-0" />
+                    <span>Background Remover</span>
                   </button>
                 </li>
                 <li>
                   <button
                     onClick={() => handleToolClick('/units-converter')}
-                    className="text-[#8FA3AB] hover:text-[#5EC4BA] transition-colors text-left"
+                    className="text-[#8FA3AB] hover:text-[#6FA9F5] transition-colors text-left flex items-center gap-2"
                   >
-                    Units Converter
+                    <UnitsQuantitiesIcon size={16} hue="#6FA9F5" className="w-4 h-4 shrink-0" />
+                    <span>Units Converter</span>
                   </button>
                 </li>
                 <li>
                   <button
                     onClick={() => handleToolClick('/bmi-calculator')}
-                    className="text-[#8FA3AB] hover:text-[#5EC4BA] transition-colors text-left"
+                    className="text-[#8FA3AB] hover:text-[#6FD49A] transition-colors text-left flex items-center gap-2"
                   >
-                    BMI Calculator
+                    <BmiCalculatorIcon size={16} hue="#6FD49A" className="w-4 h-4 shrink-0" />
+                    <span>BMI Calculator</span>
                   </button>
                 </li>
               </ul>

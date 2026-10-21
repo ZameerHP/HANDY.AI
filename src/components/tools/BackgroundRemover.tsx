@@ -6,7 +6,8 @@ import {
   createRawImageData,
 } from '../../utils/bg-remover';
 
-let pipelineFn: any = null;
+let modelInstance: any = null;
+let processorInstance: any = null;
 
 const BG_PRESETS = [
   { id: 'transparent', label: 'Transparent', value: 'transparent' },
@@ -112,26 +113,23 @@ export const BackgroundRemover: React.FC = () => {
     setStatusMessage('Initializing neural segmentation engine...');
 
     try {
-      if (!pipelineFn) {
+      if (!modelInstance || !processorInstance) {
         setIsDownloadingModel(true);
         setStatusMessage('Loading RMBG-1.4 model weights (~28 MB, cached locally)...');
         const transformers = await import('@xenova/transformers');
         transformers.env.allowLocalModels = false;
         transformers.env.useBrowserCache = true;
 
-        pipelineFn = await transformers.pipeline(
-          'image-segmentation',
-          'briaai/RMBG-1.4',
-          {
-            progress_callback: (data: any) => {
-              if (data.status === 'progress' && data.total) {
-                const pct = Math.round((data.loaded / data.total) * 100);
-                setDownloadProgress(pct);
-                setStatusMessage(`Caching model weights: ${pct}%`);
-              }
-            },
-          }
-        );
+        modelInstance = await transformers.AutoModel.from_pretrained('briaai/RMBG-1.4', {
+          progress_callback: (data: any) => {
+            if (data.status === 'progress' && data.total) {
+              const pct = Math.round((data.loaded / data.total) * 100);
+              setDownloadProgress(pct);
+              setStatusMessage(`Caching model weights: ${pct}%`);
+            }
+          },
+        });
+        processorInstance = await transformers.AutoProcessor.from_pretrained('briaai/RMBG-1.4');
         setIsDownloadingModel(false);
       }
 
@@ -139,41 +137,27 @@ export const BackgroundRemover: React.FC = () => {
       const width = imgEl.naturalWidth;
       const height = imgEl.naturalHeight;
 
-      const output = await pipelineFn(fileUrl);
+      const transformers = await import('@xenova/transformers');
+      const rawImg = await transformers.RawImage.fromURL(fileUrl);
+      const { pixel_values } = await processorInstance(rawImg);
+      const { output } = await modelInstance({ input: pixel_values });
 
-      let maskData: Uint8Array;
-      if (output && output.mask) {
-        const maskImg = output.mask;
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) throw new Error('Canvas 2D unavailable');
-
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = maskImg.width;
-        tempCanvas.height = maskImg.height;
-        const tempCtx = tempCanvas.getContext('2d')!;
-        const tempImgData = tempCtx.createImageData(maskImg.width, maskImg.height);
-
-        for (let i = 0; i < maskImg.data.length; i++) {
-          const val = maskImg.data[i];
-          tempImgData.data[i * 4] = val;
-          tempImgData.data[i * 4 + 1] = val;
-          tempImgData.data[i * 4 + 2] = val;
-          tempImgData.data[i * 4 + 3] = 255;
-        }
-        tempCtx.putImageData(tempImgData, 0, 0);
-
-        ctx.drawImage(tempCanvas, 0, 0, width, height);
-        const fullImgData = ctx.getImageData(0, 0, width, height);
-
-        maskData = new Uint8Array(width * height);
-        for (let i = 0; i < maskData.length; i++) {
-          maskData[i] = fullImgData.data[i * 4];
-        }
-      } else {
+      if (!output || !output.data) {
         throw new Error('Neural network did not return a valid segmentation mask.');
+      }
+
+      const rawData = output.data;
+      const mask1024 = new Uint8ClampedArray(1024 * 1024);
+      for (let i = 0; i < rawData.length; i++) {
+        mask1024[i] = Math.round(Math.max(0, Math.min(1, rawData[i])) * 255);
+      }
+
+      const rawMask = new transformers.RawImage(mask1024, 1024, 1024, 1);
+      const resizedMask = await rawMask.resize(width, height);
+
+      const maskData = new Uint8Array(width * height);
+      for (let i = 0; i < maskData.length; i++) {
+        maskData[i] = resizedMask.data[i];
       }
 
       setRawMatte(maskData);

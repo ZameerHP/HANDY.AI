@@ -7,6 +7,11 @@ gsap.registerPlugin(ScrollTrigger);
 let lenisInstance: Lenis | null = null;
 let tickerCallback: ((time: number) => void) | null = null;
 
+// Easing function: easeInOutQuart
+export const easeInOutQuart = (t: number): number => {
+  return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
+};
+
 export function initSmoothScroll(): { lenis: Lenis | null; cleanup: () => void } {
   if (typeof window === 'undefined') {
     return { lenis: null, cleanup: () => {} };
@@ -16,7 +21,6 @@ export function initSmoothScroll(): { lenis: Lenis | null; cleanup: () => void }
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (prefersReducedMotion) {
-    // If reduced motion is preferred, ensure any scroll triggers are killed and Lenis is disabled
     if (lenisInstance) {
       lenisInstance.destroy();
       lenisInstance = null;
@@ -37,8 +41,9 @@ export function initSmoothScroll(): { lenis: Lenis | null; cleanup: () => void }
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.5,
+      wheelMultiplier: 0.9,
+      touchMultiplier: 1.0,
+      syncTouch: false, // touch smoothing off
       infinite: false,
     });
 
@@ -71,7 +76,7 @@ export function initSmoothScroll(): { lenis: Lenis | null; cleanup: () => void }
   };
 }
 
-export function scrollToSection(target: string | HTMLElement, offset: number = 0): void {
+export function scrollToSection(target: string | HTMLElement, offset: number = -100): void {
   if (typeof window === 'undefined') return;
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -86,10 +91,11 @@ export function scrollToSection(target: string | HTMLElement, offset: number = 0
     return;
   }
 
+  // Anchor jumps use scrollTo with duration 1.4 and easeInOutQuart curve
   lenisInstance.scrollTo(target, {
     offset,
-    duration: 1.15,
-    easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    duration: 1.4,
+    easing: easeInOutQuart,
   });
 }
 

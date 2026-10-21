@@ -3,252 +3,347 @@ import React from 'react';
 interface IconProps {
   className?: string;
   size?: number;
+  hue?: string;
+  isHovered?: boolean;
 }
 
 /**
- * 1. Universal Image Format Converter
- * Geometric interlocking frames / transform mark with corner registration ticks
+ * 01. Universal Image Format Converter
+ * Purposeful line icon: overlapping image frames with two-way swap arrows (1.5px stroke).
+ * Hover micro-interaction: swap arrows shift and swap positions.
  */
-export const FormatConverterIcon: React.FC<IconProps> = ({ className = 'w-10 h-10', size = 40 }) => (
+export const FormatConverterIcon: React.FC<IconProps> = ({
+  className = 'w-6 h-6',
+  size = 24,
+  hue = '#5EC4BA',
+  isHovered = false,
+}) => (
   <svg
     width={size}
     height={size}
-    viewBox="0 0 40 40"
+    viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
     aria-hidden="true"
   >
-    {/* Background soft ambient badge glow */}
-    <rect x="2" y="2" width="36" height="36" rx="8" fill="#5EC4BA" fillOpacity="0.06" />
-    
-    {/* Base portrait frame */}
+    {/* Base frame */}
+    <rect
+      x="3"
+      y="5"
+      width="13"
+      height="13"
+      rx="2.5"
+      stroke="#8FA3AB"
+      strokeWidth="1.5"
+      strokeOpacity="0.8"
+    />
+    {/* Overlapping converted frame */}
     <rect
       x="8"
-      y="12"
-      width="18"
-      height="22"
-      rx="3"
-      stroke="#8FA3AB"
+      y="7"
+      width="13"
+      height="13"
+      rx="2.5"
+      stroke={hue}
       strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeDasharray="2 3"
+      fill={hue}
+      fillOpacity="0.08"
     />
-    
-    {/* Interlocking landscape target frame */}
-    <rect
-      x="14"
-      y="6"
-      width="20"
-      height="18"
-      rx="3"
-      stroke="#5EC4BA"
-      strokeWidth="1.5"
-    />
-    
-    {/* Intersecting center node */}
-    <circle cx="21" cy="18" r="2.5" fill="#5EC4BA" />
-    <circle cx="21" cy="18" r="5" stroke="#5EC4BA" strokeWidth="0.75" strokeOpacity="0.4" />
-    
-    {/* Transform dynamic arrow */}
+    {/* Swap arrow top (pointing right) */}
+    <g
+      className="transition-transform duration-300 ease-out"
+      style={{
+        transform: isHovered ? 'translateX(2.5px)' : 'none',
+      }}
+    >
+      <path
+        d="M6 10H14M14 10L11.5 7.5M14 10L11.5 12.5"
+        stroke="#EAF2F4"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+    {/* Swap arrow bottom (pointing left) */}
+    <g
+      className="transition-transform duration-300 ease-out"
+      style={{
+        transform: isHovered ? 'translateX(-2.5px)' : 'none',
+      }}
+    >
+      <path
+        d="M16 16H8M8 16L10.5 13.5M8 16L10.5 18.5"
+        stroke={hue}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+  </svg>
+);
+
+/**
+ * 02. Image Quality Enhancer
+ * Purposeful line icon: sparkle with optical focus bracket (1.5px stroke).
+ * Hover micro-interaction: sparkle twinkles (rotates + pulses once).
+ */
+export const QualityEnhancerIcon: React.FC<IconProps> = ({
+  className = 'w-6 h-6',
+  size = 24,
+  hue = '#E6B866',
+  isHovered = false,
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    aria-hidden="true"
+  >
+    {/* Optical focus brackets */}
     <path
-      d="M10 9L15 6.5M15 6.5L13.5 11.5M15 6.5L7 10"
-      stroke="#EAF2F4"
-      strokeWidth="1.25"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    
-    {/* Precision corner registration ticks */}
-    <path d="M16 8.5H18" stroke="#EAF2F4" strokeWidth="1" strokeLinecap="round" />
-    <path d="M31 8.5H32" stroke="#EAF2F4" strokeWidth="1" strokeLinecap="round" />
-    <path d="M10 31H12" stroke="#8FA3AB" strokeWidth="1" strokeLinecap="round" />
-  </svg>
-);
-
-/**
- * 2. Image Quality Enhancer
- * Aperture / focus diamond crystal with clarity facets and optical focus markers
- */
-export const QualityEnhancerIcon: React.FC<IconProps> = ({ className = 'w-10 h-10', size = 40 }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 40 40"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    aria-hidden="true"
-  >
-    {/* Subtle glow background */}
-    <rect x="2" y="2" width="36" height="36" rx="8" fill="#5EC4BA" fillOpacity="0.06" />
-
-    {/* Outer focus brackets */}
-    <path d="M7 13V9C7 7.89543 7.89543 7 9 7H13" stroke="#8FA3AB" strokeWidth="1.25" strokeLinecap="round" />
-    <path d="M27 7H31C32.1046 7 33 7.89543 33 9V13" stroke="#8FA3AB" strokeWidth="1.25" strokeLinecap="round" />
-    <path d="M33 27V31C33 32.1046 32.1046 33 31 33H27" stroke="#8FA3AB" strokeWidth="1.25" strokeLinecap="round" />
-    <path d="M13 33H9C7.89543 33 7 32.1046 7 31V27" stroke="#8FA3AB" strokeWidth="1.25" strokeLinecap="round" />
-
-    {/* Central multi-faceted crystal diamond */}
-    <polygon
-      points="20,10 28,18 20,30 12,18"
-      stroke="#5EC4BA"
-      strokeWidth="1.5"
-      strokeLinejoin="round"
-      fill="#5EC4BA"
-      fillOpacity="0.12"
-    />
-
-    {/* Internal diamond facets */}
-    <line x1="12" y1="18" x2="28" y2="18" stroke="#5EC4BA" strokeWidth="1" strokeOpacity="0.8" />
-    <line x1="20" y1="10" x2="20" y2="30" stroke="#EAF2F4" strokeWidth="1" strokeOpacity="0.6" />
-    <polygon points="20,10 24,18 20,25 16,18" stroke="#EAF2F4" strokeWidth="0.75" fill="none" strokeOpacity="0.5" />
-
-    {/* Aperture light sparkle */}
-    <circle cx="20" cy="18" r="1.5" fill="#FFFFFF" />
-  </svg>
-);
-
-/**
- * 3. AI Background Remover
- * Subject cutout silhouette surrounded by dotted precision perimeter mask and alpha checker
- */
-export const BackgroundRemoverIcon: React.FC<IconProps> = ({ className = 'w-10 h-10', size = 40 }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 40 40"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    aria-hidden="true"
-  >
-    {/* Subtle glow background */}
-    <rect x="2" y="2" width="36" height="36" rx="8" fill="#5EC4BA" fillOpacity="0.06" />
-
-    {/* Dotted perimeter cutting line (marching ants mask) */}
-    <rect
-      x="6"
-      y="6"
-      width="28"
-      height="28"
-      rx="6"
+      d="M4 8V5C4 4.44772 4.44772 4 5 4H8"
       stroke="#8FA3AB"
-      strokeWidth="1.25"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    <path
+      d="M16 4H19C19.5523 4 20 4.44772 20 5V8"
+      stroke="#8FA3AB"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    <path
+      d="M20 16V19C20 19.5523 19.5523 20 19 20H16"
+      stroke="#8FA3AB"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    <path
+      d="M8 20H5C4.44772 20 4 19.5523 4 19V16"
+      stroke="#8FA3AB"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+
+    {/* Central 4-point sparkle */}
+    <g
+      className="transition-transform duration-500 ease-out origin-center"
+      style={{
+        transform: isHovered ? 'scale(1.18) rotate(45deg)' : 'none',
+        transformOrigin: '12px 12px',
+      }}
+    >
+      <path
+        d="M12 6C12 9.5 9.5 12 6 12C9.5 12 12 14.5 12 18C12 14.5 14.5 12 18 12C14.5 12 12 9.5 12 6Z"
+        stroke={hue}
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+        fill={hue}
+        fillOpacity="0.16"
+      />
+      <circle cx="12" cy="12" r="1.25" fill="#EAF2F4" />
+    </g>
+  </svg>
+);
+
+/**
+ * 03. Accurate AI Background Remover
+ * Purposeful line icon: subject cutout silhouette over transparency checkerboard (1.5px stroke).
+ * Hover micro-interaction: checkerboard reveals / fades into view.
+ */
+export const BackgroundRemoverIcon: React.FC<IconProps> = ({
+  className = 'w-6 h-6',
+  size = 24,
+  hue = '#A08BF5',
+  isHovered = false,
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    aria-hidden="true"
+  >
+    {/* Alpha transparency checkerboard dots */}
+    <g
+      className="transition-opacity duration-300 ease-out"
+      style={{ opacity: isHovered ? 0.9 : 0.35 }}
+    >
+      <rect x="4" y="4" width="2.5" height="2.5" fill="#8FA3AB" rx="0.5" />
+      <rect x="9" y="4" width="2.5" height="2.5" fill="#8FA3AB" rx="0.5" />
+      <rect x="17.5" y="4" width="2.5" height="2.5" fill="#8FA3AB" rx="0.5" />
+      <rect x="17.5" y="9" width="2.5" height="2.5" fill="#8FA3AB" rx="0.5" />
+      <rect x="4" y="17.5" width="2.5" height="2.5" fill="#8FA3AB" rx="0.5" />
+      <rect x="17.5" y="17.5" width="2.5" height="2.5" fill="#8FA3AB" rx="0.5" />
+    </g>
+
+    {/* Subject silhouette cutout */}
+    {/* Head */}
+    <circle
+      cx="12"
+      cy="8.5"
+      r="2.75"
+      stroke={hue}
+      strokeWidth="1.5"
+      fill={hue}
+      fillOpacity="0.16"
+    />
+    {/* Shoulders */}
+    <path
+      d="M7 18.5C7 15.4624 9.46243 13 12.5 13C15.5376 13 18 15.4624 18 18.5"
+      stroke={hue}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      fill={hue}
+      fillOpacity="0.16"
+    />
+
+    {/* Marching ants / cutting perimeter dashed line on right */}
+    <path
+      d="M20 7V17"
+      stroke="#EAF2F4"
+      strokeWidth="1.5"
       strokeDasharray="2 3"
+      strokeLinecap="round"
+      className="transition-all duration-300"
+      style={{
+        strokeDashoffset: isHovered ? 5 : 0,
+      }}
+    />
+  </svg>
+);
+
+/**
+ * 04. Universal Units & Quantities
+ * Purposeful line icon: ruler with two-way measurement arrows (1.5px stroke).
+ * Hover micro-interaction: ruler millimeter ticks slide.
+ */
+export const UnitsQuantitiesIcon: React.FC<IconProps> = ({
+  className = 'w-6 h-6',
+  size = 24,
+  hue = '#6FA9F5',
+  isHovered = false,
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    aria-hidden="true"
+  >
+    {/* Ruler main body */}
+    <rect
+      x="3"
+      y="7"
+      width="18"
+      height="6"
+      rx="1.5"
+      stroke="#8FA3AB"
+      strokeWidth="1.5"
+    />
+
+    {/* Ruler graduation tick marks */}
+    <g
+      className="transition-transform duration-300 ease-out"
+      style={{
+        transform: isHovered ? 'translateX(1.5px)' : 'none',
+      }}
+    >
+      <line x1="6" y1="7" x2="6" y2="10" stroke="#EAF2F4" strokeWidth="1.25" strokeLinecap="round" />
+      <line x1="9" y1="7" x2="9" y2="11" stroke={hue} strokeWidth="1.25" strokeLinecap="round" />
+      <line x1="12" y1="7" x2="12" y2="10" stroke="#EAF2F4" strokeWidth="1.25" strokeLinecap="round" />
+      <line x1="15" y1="7" x2="15" y2="11" stroke={hue} strokeWidth="1.25" strokeLinecap="round" />
+      <line x1="18" y1="7" x2="18" y2="10" stroke="#EAF2F4" strokeWidth="1.25" strokeLinecap="round" />
+    </g>
+
+    {/* Two-way conversion arrows below */}
+    <g
+      className="transition-transform duration-300 ease-out"
+      style={{
+        transform: isHovered ? 'scaleX(1.1)' : 'none',
+        transformOrigin: '12px 18px',
+      }}
+    >
+      <path
+        d="M4 17.5H20M4 17.5L6.5 15.5M4 17.5L6.5 19.5M20 17.5L17.5 15.5M20 17.5L17.5 19.5"
+        stroke={hue}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+  </svg>
+);
+
+/**
+ * 05. Body Mass Index Calculator
+ * Purposeful line icon: semicircle biometric gauge with sweep needle (1.5px stroke).
+ * Hover micro-interaction: needle sweeps across arc.
+ */
+export const BmiCalculatorIcon: React.FC<IconProps> = ({
+  className = 'w-6 h-6',
+  size = 24,
+  hue = '#6FD49A',
+  isHovered = false,
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    aria-hidden="true"
+  >
+    {/* Semicircle gauge track */}
+    <path
+      d="M4 17C4 12.5817 7.58172 9 12 9C16.4183 9 20 12.5817 20 17"
+      stroke="#8FA3AB"
+      strokeWidth="1.5"
+      strokeLinecap="round"
       strokeOpacity="0.6"
     />
-
-    {/* Stylized subject silhouette cutout */}
-    {/* Head */}
-    <circle cx="20" cy="14" r="4" stroke="#5EC4BA" strokeWidth="1.5" fill="#5EC4BA" fillOpacity="0.2" />
-    {/* Torso/Shoulders */}
+    {/* Active WHO normal range arc section */}
     <path
-      d="M12 29C12 24.5817 15.5817 21 20 21C24.4183 21 28 24.5817 28 29"
-      stroke="#5EC4BA"
+      d="M8.5 11.2C9.55 10.4 10.7 10 12 10C13.3 10 14.45 10.4 15.5 11.2"
+      stroke={hue}
       strokeWidth="1.5"
       strokeLinecap="round"
-      fill="#5EC4BA"
-      fillOpacity="0.15"
     />
 
-    {/* Alpha transparency checkerboard dots on the exterior */}
-    <rect x="8" y="8" width="3" height="3" fill="#8FA3AB" fillOpacity="0.3" rx="0.5" />
-    <rect x="14" y="8" width="3" height="3" fill="#8FA3AB" fillOpacity="0.15" rx="0.5" />
-    <rect x="29" y="8" width="3" height="3" fill="#8FA3AB" fillOpacity="0.3" rx="0.5" />
-    <rect x="29" y="14" width="3" height="3" fill="#8FA3AB" fillOpacity="0.15" rx="0.5" />
-    <rect x="8" y="27" width="3" height="3" fill="#8FA3AB" fillOpacity="0.2" rx="0.5" />
-    <rect x="29" y="27" width="3" height="3" fill="#8FA3AB" fillOpacity="0.2" rx="0.5" />
+    {/* Range tick marks */}
+    <line x1="4" y1="17" x2="6" y2="17" stroke="#8FA3AB" strokeWidth="1.5" strokeLinecap="round" />
+    <line x1="20" y1="17" x2="18" y2="17" stroke="#8FA3AB" strokeWidth="1.5" strokeLinecap="round" />
+    <line x1="12" y1="9" x2="12" y2="11" stroke={hue} strokeWidth="1.5" strokeLinecap="round" />
 
-    {/* Scissors / scalpel marker indicator */}
-    <path
-      d="M26 10L30 6M30 6H27M30 6V9"
-      stroke="#5EC4BA"
-      strokeWidth="1.25"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+    {/* Pivot center */}
+    <circle cx="12" cy="17" r="2" fill="#EAF2F4" />
 
-/**
- * 4. Universal Units & Quantities
- * Precision vernier calipers with dial ruler balance and scale ticks
- */
-export const UnitsQuantitiesIcon: React.FC<IconProps> = ({ className = 'w-10 h-10', size = 40 }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 40 40"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    aria-hidden="true"
-  >
-    {/* Subtle glow background */}
-    <rect x="2" y="2" width="36" height="36" rx="8" fill="#5EC4BA" fillOpacity="0.06" />
-
-    {/* Horizontal caliper beam */}
-    <rect x="7" y="13" width="26" height="5" rx="1.5" stroke="#8FA3AB" strokeWidth="1.2" />
-
-    {/* Ruler millimeter graduation ticks */}
-    <line x1="12" y1="13" x2="12" y2="15.5" stroke="#EAF2F4" strokeWidth="1" strokeLinecap="round" />
-    <line x1="15" y1="13" x2="15" y2="17" stroke="#5EC4BA" strokeWidth="1" strokeLinecap="round" />
-    <line x1="18" y1="13" x2="18" y2="15.5" stroke="#EAF2F4" strokeWidth="1" strokeLinecap="round" />
-    <line x1="21" y1="13" x2="21" y2="17" stroke="#5EC4BA" strokeWidth="1" strokeLinecap="round" />
-    <line x1="24" y1="13" x2="24" y2="15.5" stroke="#EAF2F4" strokeWidth="1" strokeLinecap="round" />
-    <line x1="27" y1="13" x2="27" y2="17" stroke="#5EC4BA" strokeWidth="1" strokeLinecap="round" />
-
-    {/* Fixed caliper jaw */}
-    <path d="M7 13V25C7 26.5 8.5 28 10 28" stroke="#8FA3AB" strokeWidth="1.5" strokeLinecap="round" />
-
-    {/* Moving vernier jaw */}
-    <path d="M22 13V25C22 26.5 20.5 28 19 28" stroke="#5EC4BA" strokeWidth="1.5" strokeLinecap="round" />
-
-    {/* Circular precision balance dial / needle at bottom */}
-    <circle cx="27" cy="27" r="5" stroke="#5EC4BA" strokeWidth="1.25" fill="#0A1218" />
-    <line x1="27" y1="27" x2="29" y2="24.5" stroke="#EAF2F4" strokeWidth="1.2" strokeLinecap="round" />
-    <circle cx="27" cy="27" r="1" fill="#5EC4BA" />
-  </svg>
-);
-
-/**
- * 5. Body Mass Index Calculator
- * Harmonic balance scale with calibrated biometric axis and metric gauge
- */
-export const BmiCalculatorIcon: React.FC<IconProps> = ({ className = 'w-10 h-10', size = 40 }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 40 40"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    aria-hidden="true"
-  >
-    {/* Subtle glow background */}
-    <rect x="2" y="2" width="36" height="36" rx="8" fill="#5EC4BA" fillOpacity="0.06" />
-
-    {/* Central vertical biometric spinal axis */}
-    <line x1="20" y1="7" x2="20" y2="33" stroke="#8FA3AB" strokeWidth="1.5" strokeLinecap="round" />
-
-    {/* Harmonic horizontal beam balance */}
-    <path d="M10 16L20 13L30 16" stroke="#5EC4BA" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-
-    {/* Fulcrum point */}
-    <circle cx="20" cy="13" r="2.5" fill="#5EC4BA" />
-    <circle cx="20" cy="13" r="4.5" stroke="#5EC4BA" strokeWidth="0.75" strokeOpacity="0.4" />
-
-    {/* Left weight pan */}
-    <path d="M10 16V22M7 22H13" stroke="#EAF2F4" strokeWidth="1.2" strokeLinecap="round" />
-    <path d="M7 22C7 24 8.5 25.5 10 25.5C11.5 25.5 13 24 13 22" fill="#5EC4BA" fillOpacity="0.2" />
-
-    {/* Right height pan with measurement ticks */}
-    <path d="M30 16V22M27 22H33" stroke="#EAF2F4" strokeWidth="1.2" strokeLinecap="round" />
-    <path d="M27 22C27 24 28.5 25.5 30 25.5C31.5 25.5 33 24 33 22" fill="#5EC4BA" fillOpacity="0.2" />
-
-    {/* Calibrated biometric base pedestal */}
-    <path d="M14 33H26" stroke="#8FA3AB" strokeWidth="1.5" strokeLinecap="round" />
-    <path d="M17 30H23" stroke="#5EC4BA" strokeWidth="1.2" strokeLinecap="round" />
+    {/* Sweeping needle */}
+    <g
+      className="transition-transform duration-500 cubic-bezier(0.34, 1.56, 0.64, 1)"
+      style={{
+        transform: isHovered ? 'rotate(24deg)' : 'rotate(-12deg)',
+        transformOrigin: '12px 17px',
+      }}
+    >
+      <line
+        x1="12"
+        y1="17"
+        x2="15.5"
+        y2="11"
+        stroke={hue}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </g>
   </svg>
 );

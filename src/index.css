@@ -2,6 +2,9 @@
 
 @layer base {
   :root {
+    color-scheme: dark;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
     --bg: #05090D;
     --bg-raised: #0A1218;
     --surface: #0F1A22;
@@ -9,8 +12,23 @@
     --text: #EAF2F4;
     --text-muted: #8FA3AB;
     --accent: #5EC4BA;
-    --accent-horizon: #ad5f5a;
     --hairline: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Custom dark scrollbar matching Defect 8 */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.28);
   }
 
   html.lenis, html.lenis body {
@@ -36,20 +54,31 @@
   body {
     background-color: var(--bg);
     color: var(--text);
-    font-family: "Hanken Grotesk", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     overflow-x: hidden;
   }
 
-  /* Single radius rule across all buttons and inputs */
+  /* Universal Geist family enforcement for headline, body, nav, buttons, tabs and numerals */
+  *, button, input, select, textarea {
+    font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* Single radius rule across all standard buttons and inputs */
   button, input, select, textarea {
     border-radius: 10px;
   }
 }
 
+/* Tabular numerals for all ticking and dynamic numerical values */
+.tnum, [data-tabular-nums] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
 .hero-grain {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.07;
+  opacity: 0.04;
   mix-blend-mode: overlay;
   pointer-events: none;
 }
